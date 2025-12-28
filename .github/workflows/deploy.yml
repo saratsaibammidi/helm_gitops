@@ -1,4 +1,4 @@
-name: CI-CD with Helm (Minikube)
+name: Helm Deploy
 
 on:
   push:
@@ -10,43 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Get the code from GitHub
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # 2. Build the Docker image locally on the runner
-      - name: Build Docker image
-        run: docker build -t myapp:latest app/
-
-      # 3. Setup Minikube (Installs the tool)
-      - name: Setup Minikube
-        uses: medyagh/setup-minikube@latest
-        with:
-          container-runtime: docker
-
-      # 4. Load the local image into the Minikube cluster
-      - name: Load Docker image into Minikube
-        run: |
-          minikube image load myapp:latest
-
-      # 5. Setup Helm (Installs the tool)
       - name: Set up Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v3
 
-      # 6. Verify the path exists (This is for your logs to double-check)
-      - name: Debug File Path
-        run: ls -R app/helm/myapp
+      - name: List Helm chart files
+        run: ls -R ./app/helm/myapp
 
-      # 7. Deploy to Kubernetes
-      - name: Deploy using Helm
+      - name: Deploy Helm chart
         run: |
-          # Pointing directly to the subfolder from the root
           helm upgrade --install myapp ./app/helm/myapp \
-            --set image.repository=myapp \
-            --set image.tag=latest
-
-      # 8. Verification
-      - name: Verify Deployment
-        run: |
-          kubectl get pods
-          kubectl get services
+            --namespace default \
+            --create-namespace
