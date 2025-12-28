@@ -62,6 +62,4 @@ jobs:
       # 10. Deploy Helm chart
       - name: Deploy myapp Helm chart
         run: |
-          helm upgrade --install myapp ./app/helm/myapp \
-            --namespace default \
-            --create-namespace
+          helm upgrade --install myapp ./app/helm/myapp --namespace default --create-namespace
