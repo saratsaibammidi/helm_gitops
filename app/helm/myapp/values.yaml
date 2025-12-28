@@ -1,7 +1,7 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
-  repository: yourdockerhubusername/myapp
+  repository: my/myapp # replace with your Docker Hub username
   tag: latest
 
 service:

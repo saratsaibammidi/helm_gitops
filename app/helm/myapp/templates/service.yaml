@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: myapp
 spec:
-  type: {{ .Values.service.type }}
+  type: { { .Values.service.type } }
   selector:
     app: myapp
   ports:
-  - port: {{ .Values.service.port }}
-    targetPort: 5000
+    - port: { { .Values.service.port } }
+      targetPort: { { .Values.service.port } }
+      nodePort: 30001 # optional: fixed NodePort for local testing
