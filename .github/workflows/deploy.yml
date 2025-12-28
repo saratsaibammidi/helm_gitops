@@ -1,4 +1,4 @@
-name: CI-CD with Helm
+name: CI-CD with Helm (Minikube)
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -26,19 +26,30 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
 
-      # 5️⃣ Set up Helm
+      # 5️⃣ Set up Minikube
+      - name: Install Minikube
+        uses: medyagh/setup-minikube@v3
+        with:
+          container-runtime: docker
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+          kubectl config use-context minikube
+
+      # 6️⃣ Set up Helm
       - name: Set up Helm
         uses: azure/setup-helm@v4
 
-      # 6️⃣ Optional: Debug repo structure
+      # 7️⃣ Debug repo structure
       - name: Show repository files
         run: |
           pwd
           ls -R
 
-      # 7️⃣ Deploy using Helm
+      # 8️⃣ Deploy using Helm
       - name: Deploy using Helm
-        working-directory: app # Ensures Helm runs relative to the Docker app folder
+        working-directory: app # Helm chart is inside app/helm/myapp
         run: |
           helm upgrade --install myapp ./helm/myapp \
             --set image.repository=${{ secrets.DOCKER_USERNAME }}/myapp \
