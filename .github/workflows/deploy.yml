@@ -28,7 +28,7 @@ jobs:
 
       # 5️⃣ Set up Minikube
       - name: Install Minikube
-        uses: medyagh/setup-minikube@v3
+        uses: medyagh/setup-minikube@latest
         with:
           container-runtime: docker
 
