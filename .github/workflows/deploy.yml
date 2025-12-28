@@ -22,6 +22,12 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
 
+      # --- START MINIKUBE HERE ---
+      - name: Start Minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          container-runtime: docker
+
       - name: Set up Helm
         uses: azure/setup-helm@v4
 
