@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: my/myapp # replace with your Docker Hub username
+  repository: saratsai/myapp # replace with your Docker Hub username
   tag: latest
 
 service:
