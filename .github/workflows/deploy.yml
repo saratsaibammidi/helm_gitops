@@ -22,7 +22,6 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
 
-      # --- START MINIKUBE HERE ---
       - name: Start Minikube
         uses: medyagh/setup-minikube@latest
         with:
@@ -33,4 +32,11 @@ jobs:
 
       - name: Deploy using Helm
         run: |
-          helm upgrade --install myapp helm/myapp
+          # Added ./ to clarify this is a local folder path
+          helm upgrade --install myapp ./helm/myapp
+
+          # This helper command waits for the pods to be ready so you can see success in your logs
+          kubectl rollout status deployment/myapp --timeout=90s
+
+          # Finally, show the status of all resources
+          kubectl get all
